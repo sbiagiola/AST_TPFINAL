@@ -1,6 +1,6 @@
-# AST_TPFinal
+# AST1 - TP Final
 
-Trabajo Final de Análisis de Series de Tiempo enfocado en el estudio y pronostico de la volatilidad del S&P 500 usando al ETF `SPY` como proxy operativo.
+Trabajo Final de Análisis de Series de Tiempo enfocado en el estudio y pronóstico de la volatilidad del S&P 500 usando al ETF `SPY` como proxy operativo.
 
 ## Objetivo
 
