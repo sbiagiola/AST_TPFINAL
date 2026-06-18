@@ -1,4 +1,4 @@
-# AST1 - TP Final
+# AST - TP Final
 
 Trabajo Final de Análisis de Series de Tiempo enfocado en el estudio y pronóstico de la volatilidad del S&P 500 usando al ETF `SPY` como proxy operativo.
 
@@ -13,7 +13,7 @@ Este repositorio contiene el flujo completo desarrollado para el trabajo final d
 
 El objetivo es estudiar la capacidad de distintos enfoques para anticipar la volatilidad futura del ETF `SPY` para el período `2010-01-01` a `2025-12-31`, utilizado como proxy operativo del índice S&P 500.
 
-Se construye un conjunto de variables derivadas de precios históricos y se comparan distintos modelos de complejidad creciente mediante una metodología de validación temporal consistente.
+Se construye un conjunto de variables derivadas de precios históricos y se comparan modelos de complejidad creciente mediante una metodología de validación temporal consistente y métricas de error comparables en test.
 
 ## Archivos principales
 
@@ -31,11 +31,12 @@ Se construye un conjunto de variables derivadas de precios históricos y se comp
 ### `02_modelado.ipynb`
 
 - definición del target predictivo
-- construcción de baselines
+- construcción del baseline persistente
 - entrenamiento de modelos
 - selección de variables
-- comparación de desempeño
-- análisis de resultados
+- comparación de desempeño con `MAE` y `RMSE`
+- análisis visual de predicciones y errores
+- cierre con gráficos pensados para presentación
 
 ## Estructura esperada de salidas
 
@@ -56,6 +57,7 @@ Dependencias principales:
 - `ipykernel`
 - `scikit-learn`
 - `keras`
+- `torch`
 
 Están listadas en `requirements.txt`.
 
@@ -81,7 +83,9 @@ jupyter notebook 01_preparacion_spy_volatilidad.ipynb
 - No se rellenan fines de semana ni feriados, porque no hubo negociación real.
 - Se calculan retornos logarítmicos para analizar cambios relativos y construir medidas de volatilidad.
 - La volatilidad móvil se usa como proxy de la variabilidad diaria.
+- El target se define como `volatility_21d` desplazada `21` ruedas hacia adelante para evitar redundancia entre ventanas consecutivas.
 - La división de datos respeta el orden temporal para evitar `data leakage`.
+- La comparación final entre modelos se hace sobre fechas comunes cuando corresponde, para no favorecer ni perjudicar al modelo secuencial.
 
 ## Estado actual
 
@@ -90,15 +94,24 @@ Implementado:
 - pipeline reproducible de descarga y preparación de datos
 - construcción de variables de volatilidad y retornos
 - análisis exploratorio inicial
-- definición del problema de predicción de volatilidad a 21 dias
-- modelo baseline constante
+- definición del problema de predicción de volatilidad a `21` días
+- modelo baseline persistente
 - modelo de regresión lineal con selección de variables
 - modelo Random Forest
 - modelo LSTM basado en secuencias temporales
-- evaluación comparativa sobre conjuntos de validación y prueba
+- evaluación comparativa sobre validación y prueba
+- visualizaciones finales de métricas, mejora relativa, residuos y pronósticos vs. observado
+
+Resumen del resultado actual en test sobre fechas comparables:
+
+- baseline: `MAE = 0.004116`, `RMSE = 0.006630`
+- lineal: `MAE = 0.003797`, `RMSE = 0.005519`
+- Random Forest: `MAE = 0.003414`, `RMSE = 0.006953`
+- LSTM: `MAE = 0.003197`, `RMSE = 0.005372`
 
 Posibles extensiones futuras:
 
 - incorporación de variables macroeconomicas o externas
-- arquitecturas neuronales del tipo modelo fundacional
+- redefinición del target como volatilidad realizada estrictamente futura
+- arquitecturas neuronales más profundas o regularizadas
 - estrategias de ensamble entre modelos
